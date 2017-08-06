@@ -16,6 +16,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 #Template path
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 
+#Static path
+STATIC_PATH = os.path.join(BASE_DIR,'static')
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -88,4 +92,17 @@ STATIC_URL = '/static/'
 
 
 #Template Directories
-TEMPLATE_DIRS = (TEMPLATE_PATH,)
+TEMPLATE_DIRS = (
+    TEMPLATE_PATH,
+)
+
+#Static files Directories
+STATICFILES_DIRS = (
+   STATIC_PATH,
+)
+
+#Media-Url: base URL from which all media files will be accessible on development server
+MEDIA_URL = '/media/'
+
+#Media root: used to tell Django where uploaded files should be stored on my local disk (absolute path needed)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

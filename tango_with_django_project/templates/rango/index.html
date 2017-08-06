@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+
+{% load staticfiles %} <!--ne information, damit das django-template-system weiss, dass wir static media nutzen-->
 <html>
 
     <head>
@@ -6,9 +8,19 @@
     </head>
 
     <body>
-        <h1>Philipp sagt...</h1>
-        Hallo ihr kleinen speckigen Schweineschwarten! <strong>{{ boldmessage }}</strong><br />
+        <h1>Philipp sagt: Hallo ihr Speckmöpse!</h1>
+        {% if categories %}
+            <ul>
+                {% for category in categories %}
+		<li><a href="/rango/category/{{category.slug}}">{{ category.name }}</a></li>
+		{% endfor %}
+	    </ul>
+	{% else %}
+	    <strong> There are no categories present.</strong>
+	{% endif %} 
+
         <a href="/rango/about/">About</a><br />
+        <img src="{% static "images/rango.jpg" %}" alt="pikturisierter Rangoianer" /> <!-- wir wollen hier ein image aus unserem static-unterordner images reinpacken und zwar rango.jpg-->
     </body>
 
 </html>
