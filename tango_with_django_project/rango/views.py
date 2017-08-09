@@ -3,6 +3,7 @@ from django.shortcuts import render
 #Import needed models here
 from rango.models import Category
 from rango.models import Page
+from rango.forms import CategoryForm
 #------------------------------------
 
 from django.http import HttpResponse
@@ -23,7 +24,8 @@ def index(request):
     # , wenn wir die template-engine nutzen.
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict = {'categories': category_list}
-
+    #Wir fuegen noch bissl was hinzu, um uns die derzeitigen Top 5 der Seiten anzeigen zu lassen.
+    context_dict['pages'] = Page.objects.order_by('-views')[:5]
     # Return a rendered response to send to the client.
     # We make use of the shortcur function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
@@ -64,3 +66,27 @@ def category(request, category_name_slug):
 
     # Go render the response and return it to the client.
     return render(request, 'rango/category.html', context_dict)
+
+#view fuer die category-form
+def add_category(request):
+    # A HTTP POST? , dies ist ein Kommentar, keine Frage :D Hier soll schatz ich gesagt werden: war der request ein http-POST? Wenn ja, dann mache dies ansonsten halt wat anderes; siehe unten ;)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST) #POST ist ein Feld eines HttpRequest-Objektes. Wie von Django Request-Objekte erzeugt werden siehe Internet; genaueres ueber HttpRequest.POST ist auf doc.djangoproject.com zu entnehmen.
+
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            #Save the new category to the database
+            form.save(commit=True)
+
+            #Now call the index() view. The user will be shown the homepage.
+            return index(request)
+        else:
+            #The supplied form contained errors-just print them to the terminal.
+            print form.errors
+    else:
+        #If the request was not a POST, display the form to enter details.
+        form = CategoryForm()
+    
+    # Bad form (or form details), no form supplied...
+    # Render the form with error messages (if any).
+    return render(request, 'rango/add_category.html', {'form':form})

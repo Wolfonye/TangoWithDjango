@@ -2,25 +2,39 @@
 
 {% load staticfiles %} <!--ne information, damit das django-template-system weiss, dass wir static media nutzen-->
 <html>
-
     <head>
         <title>Rango</title>
     </head>
 
     <body>
         <h1>Philipp sagt: Hallo ihr Speckmöpse!</h1>
+        <div id="categoryList">
         {% if categories %}
             <ul>
                 {% for category in categories %}
-		<li><a href="/rango/category/{{category.slug}}">{{ category.name }}</a></li>
-		{% endfor %}
-	    </ul>
-	{% else %}
-	    <strong> There are no categories present.</strong>
-	{% endif %} 
-
+                <li><a href="/rango/category/{{category.slug}}">{{ category.name }}</a></li>
+		        {% endfor %}
+	        </ul>
+	    {% else %}
+	        <strong> There are no categories present.</strong>
+	    {% endif %} 
+        </div>
+        <div id="topPagesList">
+            <h2>Top-Pages</h2>
+            {% if pages %}
+                <ul>
+                    {% for page in pages %}
+                    <li><a href="{{page.url}}">{{page.title}}</a> ({{page.views}} Views)</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <strong> There are no categories present. </strong>
+            {% endif %}
+        </div>
         <a href="/rango/about/">About</a><br />
         <img src="{% static "images/rango.jpg" %}" alt="pikturisierter Rangoianer" /> <!-- wir wollen hier ein image aus unserem static-unterordner images reinpacken und zwar rango.jpg-->
+        <a href="/rango/add_category/"> Add a new category!</a><br />
+        
     </body>
 
 </html>
