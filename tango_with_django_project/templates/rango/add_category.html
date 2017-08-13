@@ -6,7 +6,7 @@
 
     <body>
         <h1>Add a Category</h1>
-
+        <!--action sagt, wohin die Daten geschickt werden sollen, URL-->
         <form id="category_form" method="post" action="/rango/add_category/">
 
             {% csrf_token %}
@@ -19,7 +19,8 @@
                 {{ field.help_text }}
                 {{ field }}
             {% endfor %}
-
+            <!--type:welche sorte Input soll gezeigt werden, value:was soll drinstehen,
+                name: Name des Input-Elementes, whatever -.--->
             <input type="submit" name="submit" value="Create Category" />
         </form>
     </body>

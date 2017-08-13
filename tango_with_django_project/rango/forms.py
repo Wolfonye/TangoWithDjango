@@ -1,5 +1,6 @@
 from django import forms
-from rango.models import Page, Category
+from django.contrib.auth.models import User
+from rango.models import Page, Category, UserProfile
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category-name.")
@@ -31,13 +32,27 @@ class PageForm(forms.ModelForm):
         exclude = ('category',)
         #or specify the fields to include (leaving out what we don't want)
         #fields = ('title','url','views')
-    
+    #wir ueberschreiben hier die Methode clean. Diese wird aufgerufen, bevor form
+    #-daten in eine neue Model-Instanz gespeichert werden.
     def clean(self):
         cleaned_data = self.cleaned_data #cleaned_data scheint ein Feld von ModelForm zu sein, zumindest in django 1.7
         url = cleaned_data.get('url')
 
-        if url and not url.startswith('http://'):
+        if url and not(url.startswith('http://') or url.startswith('https://')):
             url = 'http://' + url
             cleaned_data['url'] = url
         
         return cleaned_data
+
+#Es folgen die Klassen fuer die User und UserProfile-Forms
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('website', 'picture')
